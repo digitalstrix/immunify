@@ -32,6 +32,7 @@ import {
 import Incomingcall from "./common/components/IncomingCall";
 import GlobalStyles from "./GlobalStyles";
 import { AuthContext } from "./hooks/auth/GloabalStates";
+import Mainstate from "./context/MainState";
 
 const PORTAL_TYPE_GENERAL = "GENERAL";
 const USER_TYPE_GENERAL = "GENERAL";
@@ -194,8 +195,10 @@ export default function App() {
   if (user?.portalType === PORTAL_TYPE_IMM) {
     return (
       <>
-        <GlobalStyles />
-        <AdminApp />
+        {/* <Mainstate> */}
+          <GlobalStyles />
+          <AdminApp />
+        {/* </Mainstate> */}
       </>
     );
   }

@@ -31,6 +31,7 @@ const ROLE_REPORTS_FULL = "reports_full";
 const ROLE_OPERATIONS_FULL = "operations_full";
 const ROLE_BLOG_FULL = "blog_full";
 const ROLE_PODCAST_FULL = "podcast_full";
+const ROLE_NOISE_FULL = "noise_full";
 const ROLE_MUSIC_FULL = "music_full";
 const ROLE_QUESTION_FULL = "question_full";
 const ROLE_APPOINTMENT_FULL = "appointment_full";
@@ -61,16 +62,20 @@ const IMM_PORTAL_ROLES = {
   "/view-blog": [ROLE_BLOG_FULL],
   "/viewBlogDetails/:id": [ROLE_BLOG_FULL],
   "/create-article": [ROLE_BLOG_FULL],
-  "/edit-article": [ROLE_BLOG_FULL],
+  // "/edit-article": [ROLE_BLOG_FULL],
+  "/edit-article/:id": [ROLE_BLOG_FULL],
   "/view-categories": [ROLE_BLOG_FULL],
   "/view-podcast": [ROLE_PODCAST_FULL],
   "/viewPodcastDetails/:id": [ROLE_PODCAST_FULL],
   "/create-podcast": [ROLE_PODCAST_FULL],
-  "/edit-podcast": [ROLE_PODCAST_FULL],
+  "/edit-podcast/:id": [ROLE_PODCAST_FULL],
   "/view-podcast-categories": [ROLE_PODCAST_FULL],
+  "/view-noise": [ROLE_NOISE_FULL],
+  "/create-noise": [ROLE_NOISE_FULL],
+  "/edit-noise/:id": [ROLE_NOISE_FULL],
   "/view-music": [ROLE_MUSIC_FULL],
   "/create-music": [ROLE_MUSIC_FULL],
-  "/edit-music": [ROLE_MUSIC_FULL],
+  "/edit-music/:id": [ROLE_MUSIC_FULL],
   "/view-question": [ROLE_QUESTION_FULL],
   "/create-question": [ROLE_QUESTION_FULL],
   "/edit-question": [ROLE_QUESTION_FULL],

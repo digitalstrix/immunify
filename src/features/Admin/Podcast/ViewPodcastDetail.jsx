@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import './index.css';
+import MainContext from '../../../context/MainContext';
 
 const Viewpodcastdetail = () => {
     const { id } = useParams();
+    const context = useContext(MainContext);
     useEffect(() => {
         console.log(id);
     });

@@ -9,7 +9,6 @@ import Select from '@mui/material/Select';
 import { Button } from '@material-ui/core';
 import { MultiSelect } from "react-multi-select-component";
 import MainContext from '../../../context/MainContext';
-import { useParams } from 'react-router-dom';
 
 var toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],
@@ -32,13 +31,13 @@ const options = [
     { label: "Strawberry 🍓", value: "strawberry", disabled: true },
 ];
 
-const Editarticle = (props) => {
+const Createnoise = (props) => {
     const [value1, setValue1] = useState({
-        title:"",
-        image:"",
-        status:"",
-        slug:""
-    })
+        title: "",
+        noise: "",
+        slug: "",
+        status: ""
+    });
     const [value, setValue] = useState({
         richText: '',
         simpleText: '',
@@ -46,27 +45,6 @@ const Editarticle = (props) => {
     });
     const [selected, setSelected] = useState([]);
     const context = useContext(MainContext);
-    const { id }=useParams();
-
-    useEffect(()=>{
-        getData();
-    },[]);
-
-    const getData=async()=>{
-        const ans=await context.getPost(id);
-        console.log(ans.data[0]);
-        setValue1({
-            title:ans.data[0].title,
-            image:"",
-            status:ans.data[0].status.toLowerCase(),
-            slug:ans.data[0].slug
-        });
-        setValue({
-            richText:ans.data[0].content,
-            simpleText:ans.data[0].content,
-            textLength:ans.data[0].content.length,
-        });
-    };
 
     const rteChange1 = (content, delta, source, editor) => {
         setValue({
@@ -76,49 +54,43 @@ const Editarticle = (props) => {
         })
     };
 
-    const handleChange=(e)=>{
-        if(e.target.name==="image")
-        {
-            setValue1({...value1,[e.target.name]:e.target.files[0]});
+    const handleChange = (e) => {
+        if (e.target.name === "noise") {
+            setValue1({ ...value1, [e.target.name]: e.target.files[0] });
         }
-        else
-        {
-            setValue1({...value1,[e.target.name]:e.target.value});
+        else {
+            setValue1({ ...value1, [e.target.name]: e.target.value });
         }
-        
-    }
+    };
 
-    const handleSubmit=async (e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(value1);
         console.log(value);
         console.log(selected);
-        let str="";
 
-        for(let i of selected)
-        {
-            str+=i.value+",";
+        let str = "";
+        for (let i of selected) {
+            str += i.value + ",";
         }
-        console.log(str.slice(0,-1));
+        console.log(str.slice(0, -1));
 
-        let ans = await context.updatePost({id, title: value1.title,type: "test Type",slug: value1.slug,categories: str,content: value.richText,file_link: value1.image,status: value1.status, created_by_user: "1111111" });
-        
+        // let ans = await context.createWhitenoise({title: value1.title,type: "test Type",slug: value1.slug,categories: str,content: value.richText,file_link: value1.image,status: value1.status, created_by_user: "1111111" });
+        const ans = await context.createWhitenoise({ whitenoise: value1.noise, name: value1.title, UserId: "1111111" });
         console.log(ans);
-        if(ans.status)
-        {
+        if (ans.status) {
             props.showAlert(true);
         }
-        else
-        {
+        else {
             props.showAlert(false);
         }
-    }
+    };
 
     return (
         <>
             <form onSubmit={handleSubmit}>
-                <div style={{marginBottom:"20px"}}>
-                    <h1>Edit Article</h1>
+                <div style={{ marginBottom: "20px" }}>
+                    <h1>Create White Noise</h1>
                 </div>
                 <div>
                     <h3>Title</h3>
@@ -126,13 +98,12 @@ const Editarticle = (props) => {
                 </div>
                 <div>
                     <h3>URL Slug</h3>
-                    <TextField id="slug" label="URL Slug" sx={{ width: "100%" }} name="slug" onChange={handleChange} value={value1.slug} variant="outlined" />
+                    <TextField id="slug" label="Slug" sx={{ width: "100%" }} name="slug" onChange={handleChange} value={value1.slug} variant="outlined" />
                 </div>
                 <div style={{ marginBottom: "12px" }}>
-                    <h3>Content</h3>
+                    <h3>Write Description</h3>
                     <ReactQuill theme="snow" value={value.richText} placeholder="Write here .." onChange={rteChange1} modules={{ toolbar: toolbarOptions }} />
                 </div>
-
                 <div style={{ marginBottom: "12px" }}>
                     <h3>Select Status</h3>
                     <FormControl fullWidth>
@@ -149,8 +120,8 @@ const Editarticle = (props) => {
                     </FormControl>
                 </div>
                 <div style={{ marginBottom: "12px" }}>
-                    <h3>Upload Featured Image</h3>
-                    <input type="file" name="image" onChange={handleChange} id="image" />
+                    <h3>Upload File</h3>
+                    <input type="file" name="noise" onChange={handleChange} id="noise" />
                 </div>
                 <div style={{ marginBottom: "12px" }}>
                     <h3>Select Categories</h3>
@@ -164,7 +135,7 @@ const Editarticle = (props) => {
                 <Button type="submit" color="primary" variant="contained">Submit</Button>
             </form>
         </>
-    )
+    );
 }
 
-export default Editarticle;
+export default Createnoise;

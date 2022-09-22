@@ -1,32 +1,38 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Button } from '@material-ui/core';
+import MainContext from '../../../context/MainContext';
 
-const Editquestion = () => {
+const Editquestion = (props) => {
     const [value1, setValue1] = useState({
         question:"",
         answer:"",
         category:""
     });
+    const context = useContext(MainContext);
 
     const handleChange=(e)=>{
-        if(e.target.name==="image" || e.target.name==="video")
-        {
-            setValue1({...value1,[e.target.name]:e.target.files[0]});
-        }
-        else
-        {
-            setValue1({...value1,[e.target.name]:e.target.value});
-        }
+        setValue1({...value1,[e.target.name]:e.target.value});
     };
 
     const handleSubmit=(e)=>{
         e.preventDefault();
         console.log(value1);
+
+        // let ans = await updateQuestion({ question: value1.question });
+        // console.log(ans);
+                // if(ans.success)
+        // {
+        //     props.showAlert(true);
+        // }
+        // else
+        // {
+        //     props.showAlert(false);
+        // }
     };
 
     return (

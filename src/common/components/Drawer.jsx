@@ -83,6 +83,7 @@ import PodcastsIcon from '@mui/icons-material/Podcasts';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import QuizIcon from '@mui/icons-material/Quiz';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
+import NoiseAwareIcon from '@mui/icons-material/NoiseAware';
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -180,6 +181,7 @@ function PersistentDrawerLeft(props) {
   const [openOperations, setOpenOperations] = React.useState(false);
   const [openContent, setOpenContent] = React.useState(false);
   const [openPodcast, setOpenPodcast] = React.useState(false);
+  const [openNoise, setOpenNoise] = React.useState(false);
   const [openMusic, setOpenMusic] = React.useState(false);
   const [openQuestion, setOpenQuestion] = React.useState(false);
   const [openAppointment, setOpenAppointment] = React.useState(false);
@@ -201,12 +203,12 @@ function PersistentDrawerLeft(props) {
 
   const isAuthorized = ({ portal, to: screen }) => {
     const roles = getRolesByPortalScreen(portal, screen);
-    console.log(screen);
-    console.log(roles);
+    // console.log(screen);
+    // console.log(roles);
     // if (keycloak) {
       return roles.some(async (role) => {
         const realm = await hasRole(role)
-        console.log('realm -======> ', realm);
+        // console.log('realm -======> ', realm);
         // keycloak.hasRealmRole(role);
         // const resource = keycloak.hasResourceRole(role);
         return realm ;
@@ -418,7 +420,7 @@ function PersistentDrawerLeft(props) {
             <ListItemIcon>
               <ApprovalIcon />
             </ListItemIcon>
-            <ListItemText primary='View Blog' />
+            <ListItemText primary='View Article' />
           </ListItem>
 
           <ListItem
@@ -439,7 +441,7 @@ function PersistentDrawerLeft(props) {
             <ListItemText primary='Create Article' />
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             button
             key='opThree'
             component={NavLink}
@@ -455,7 +457,7 @@ function PersistentDrawerLeft(props) {
               <TimeIcon />
             </ListItemIcon>
             <ListItemText primary='Edit Article' />
-          </ListItem>
+          </ListItem> */}
 
           <ListItem
             button
@@ -519,7 +521,7 @@ function PersistentDrawerLeft(props) {
             <ListItemText primary='Create Podcast' />
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             button
             key='opThree'
             component={NavLink}
@@ -535,7 +537,7 @@ function PersistentDrawerLeft(props) {
               <TimeIcon />
             </ListItemIcon>
             <ListItemText primary='Edit Podcast' />
-          </ListItem>
+          </ListItem> */}
 
           <ListItem
             button
@@ -554,6 +556,68 @@ function PersistentDrawerLeft(props) {
             </ListItemIcon>
             <ListItemText primary='View Categories' />
           </ListItem>
+        </List>
+      </Collapse>
+    );
+  };
+
+  const CollapseItemsNoise = () => {
+    return (
+      <Collapse in={openNoise} timeout='auto' unmountOnExit>
+        <List component='div' disablePadding>
+          <ListItem
+            button
+            key='opTwo'
+            component={NavLink}
+            className={classes.nested}
+            exact
+            to='/view-noise'
+            activeStyle={{
+              fontWeight: "bolder",
+              backgroundColor: "#f0f0f0",
+              color: "blue",
+            }}>
+            <ListItemIcon>
+              <ApprovalIcon />
+            </ListItemIcon>
+            <ListItemText primary='View White Noise' />
+          </ListItem>
+
+          <ListItem
+            button
+            key='opOne'
+            component={NavLink}
+            className={classes.nested}
+            exact
+            to='/create-noise'
+            activeStyle={{
+              fontWeight: "bolder",
+              backgroundColor: "#f0f0f0",
+              color: "blue",
+            }}>
+            <ListItemIcon>
+              <VerifiedUserOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary='Create White Noise' />
+          </ListItem>
+
+          {/* <ListItem
+            button
+            key='opThree'
+            component={NavLink}
+            className={classes.nested}
+            exact
+            to='/edit-noise'
+            activeStyle={{
+              fontWeight: "bolder",
+              backgroundColor: "#f0f0f0",
+              color: "blue",
+            }}>
+            <ListItemIcon>
+              <TimeIcon />
+            </ListItemIcon>
+            <ListItemText primary='Edit White Noise' />
+          </ListItem> */}
         </List>
       </Collapse>
     );
@@ -599,7 +663,7 @@ function PersistentDrawerLeft(props) {
             <ListItemText primary='Create Music' />
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             button
             key='opThree'
             component={NavLink}
@@ -615,7 +679,7 @@ function PersistentDrawerLeft(props) {
               <TimeIcon />
             </ListItemIcon>
             <ListItemText primary='Edit Music' />
-          </ListItem>
+          </ListItem> */}
         </List>
       </Collapse>
     );
@@ -1048,6 +1112,16 @@ function PersistentDrawerLeft(props) {
                           closeIcon2: <ExpandMore />,
                           content: <CollapseItemsPodcast />,
                           to: "/view-podcast",
+                          portal: PORTAL_TYPE_IMM,
+                        },
+                        {
+                          text: "White Noise",
+                          icon: <NoiseAwareIcon />,
+                          onClick: () => setOpenNoise(!openNoise),
+                          openIcon2: <ExpandLess />,
+                          closeIcon2: <ExpandMore />,
+                          content: <CollapseItemsNoise />,
+                          to: "/view-noise",
                           portal: PORTAL_TYPE_IMM,
                         },
                         {

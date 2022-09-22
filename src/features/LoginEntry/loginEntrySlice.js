@@ -72,12 +72,12 @@ export const entryEmailAsync = (payload) => {
     try {
       dispatch(setEntryOtpStatus('loading'));
       dispatch(setLoading(true));
-      console.log('ccccccccc')
-      console.log('come =====> ', payload);
+      // console.log('ccccccccc')
+      // console.log('come =====> ', payload);
       const response = await LoginApi.adminLogin(payload);
-      console.log('responecece==============> ', response);
+      // console.log('responecece==============> ', response);
       if (response && response.status === 200) {
-        console.log('-=-=-= ...> ', response.data);
+        // console.log('-=-=-= ...> ', response.data);
         dispatch(setEntryOtpData(response.data));
         dispatch(setEntryOtpStatus('succeeded'));
       } else if (response && response.status === 400) {
@@ -100,11 +100,11 @@ export const entryEmailAsync = (payload) => {
 export const hasRole = async(payload) => {
   // return async (dispatch) => {
     try {
-      console.log('ccccccccc')
-      console.log('come =====> ', payload);
+      // console.log('ccccccccc')
+      // console.log('come =====> ', payload);
       const response = await LoginApi.hasRole(payload);
       await Promise.all([response]);
-      console.log('responecece==============> ', response);
+      // console.log('responecece==============> ', response);
       if (response && response.status === 200) {
         return true;
       } else {

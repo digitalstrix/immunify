@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import TextField from '@mui/material/TextField';
@@ -11,6 +11,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import MainContext from '../../../context/MainContext';
 
 var toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],
@@ -27,13 +28,14 @@ var toolbarOptions = [
     ['clean']
 ];
 
-const Createappointment = () => {
+const Createappointment = (props) => {
     const [value1, setValue1] = useState({
         patientName: "",
         appointmentID: "",
         appointmentTs: "",
         doctorName: ''
     });
+    const context = useContext(MainContext);
     const [dateTime, setDateTime] = useState(dayjs(new Date().toISOString()));
 
     const handleDTChange=(e)=>{
@@ -58,18 +60,30 @@ const Createappointment = () => {
         setValue1({ ...value1, [e.target.name]: e.target.value });
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(value1);
         console.log(value);
-        console.log(dateTime.toString());
+        console.log(new Date(dateTime.toJSON()).toLocaleDateString());
+        console.log(new Date(dateTime.toJSON()).toLocaleTimeString());
+
+        const ans = await context.createAppointment({date: new Date(dateTime.toJSON()).toLocaleDateString(), time: new Date(dateTime.toJSON()).toLocaleTimeString(), UserId: "02", patient_name: value1.patientName, doctor_name: value1.doctorName });
+        console.log(ans);
+        if(ans.status)
+        {
+            props.showAlert(true);
+        }
+        else
+        {
+            props.showAlert(false);
+        }
     }
 
     return (
         <>
             <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: "20px" }}>
-                    <h1>Create Article</h1>
+                    <h1>Create Appointment</h1>
                 </div>
                 <div>
                     <h3>Patient Name</h3>

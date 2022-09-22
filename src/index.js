@@ -14,6 +14,7 @@ import { SnackbarProvider } from "notistack";
 import Loader from "./common/components/Loader";
 
 import keycloak from "./keycloak";
+import Mainstate from "./context/MainState";
 
 const eventLogger = (event, error) => {
   console.log("onKeycloakEvent", event, error);
@@ -38,7 +39,9 @@ ReactDOM.render(
         <PersistGate loading={null} persistor={persistor}>
           <LoadScript googleMapsApiKey="AIzaSyDeNEl53GBcIR9A3RLAhkILIE6hd4ea5-Y">
             <SnackbarProvider maxSnack={3}>
-              <App />
+              <Mainstate>
+                <App />
+              </Mainstate>
             </SnackbarProvider>
           </LoadScript>
         </PersistGate>
