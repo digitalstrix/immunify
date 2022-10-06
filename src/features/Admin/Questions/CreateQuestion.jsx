@@ -23,11 +23,10 @@ const Createquestion = (props) => {
         e.preventDefault();
         console.log(value1);
 
-        let ans = await context.createQuestion({ question: value1.question, UserId:"1001" });
+        let ans = await context.createQuestion({ question: value1.question, UserId: "1001" });
         console.log(ans);
-        if(ans.status)
-        {
-            let ans1 = await context.createAnswer({ QuestionId: "3", UserId:"1001", answer: value1.answer });
+        if (ans.status) {
+            let ans1 = await context.createAnswer({ QuestionId: "3", UserId: "1", answer: value1.answer });
             console.log(ans1);
             if (ans1.status) {
                 props.showAlert(true);
@@ -36,8 +35,7 @@ const Createquestion = (props) => {
                 props.showAlert(false);
             }
         }
-        else
-        {
+        else {
             props.showAlert(false);
         }
     };

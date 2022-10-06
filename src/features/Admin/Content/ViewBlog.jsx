@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import styled from 'styled-components';
 import MainContext from '../../../context/MainContext';
+import Loader from '../../../utils/Loader';
 
 const TextField1 = styled.input`
 	height: 32px;
@@ -56,28 +57,32 @@ const Viewblog = (props) => {
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
     const [data, setData] = useState([]);
     const context = useContext(MainContext);
+    const [flag, setFlag] = useState(false);
 
-    useEffect(()=>{
+    useEffect(() => {
         getData();
-    },[]);
+    }, [flag]);
 
-    const getData=async()=>{
-        const ans=await context.getPost();
-        // console.log(ans);
-        setData(ans.data);
+    const getData = async () => {
+        const ans = await context.getPost();
+        console.log(ans);
+        setData(ans.data.sort((a, b) => parseFloat(b.id) - parseFloat(a.id)));
     };
 
-    const deleteData = async (id)=>{
+    const deleteData = async (id) => {
         // console.log(id);
-        const ans = await context.deletePost(id);
-        console.log(ans);
-        if(ans.status)
+        let c=window.confirm('Do you really want to delete?')
+        if(c)
         {
-            props.showAlert(true);
-        }
-        else
-        {
-            props.showAlert(false);
+            const ans = await context.deletePost(id);
+            console.log(ans);
+            if (ans.status) {
+                props.showAlert(true);
+                setFlag(!flag);
+            }
+            else {
+                props.showAlert(false);
+            }
         }
     };
 
@@ -85,51 +90,56 @@ const Viewblog = (props) => {
         {
             name: <h3>ID</h3>,
             selector: row => row.id,
-            sortable: true
+            sortable: true,
+            grow:1
         },
         {
             name: <h3>Title</h3>,
-            selector: row => row.title,
-            sortable: true
+            selector: row => <NavLink style={{color:"black", textDecoration:"none"}} to={`/viewBlogDetails/${row.id}`}>{row.title}</NavLink>,
+            sortable: true,
+            grow:1
         },
         {
             name: <h3>Last Modified</h3>,
             selector: row => new Date(row.updatedAt).toLocaleDateString(),
-            sortable: true
+            sortable: true,
+            grow:1
         },
         {
             name: <h3>Status</h3>,
             selector: row => row.status,
-            sortable: true
+            sortable: true,
+            grow:1
         },
         {
-            name: <h3>Menu</h3>,
+            name: <h3>Actions</h3>,
             cell: (e) => {
                 return (
                     <div className="row">
                         <div style={{ marginRight: "2px", cursor: "pointer" }}>
                             <NavLink to={`/edit-article/${e.id}`}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                 </svg>
                             </NavLink>
                         </div>
-                        <div onClick={()=>{
+                        <div onClick={() => {
                             deleteData(e.id);
                         }} style={{ marginLeft: "2px", cursor: "pointer" }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash-fill" viewBox="0 0 16 16">
                                 <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
                             </svg>
                         </div>
                     </div>
                 )
-            }
+            },
+            grow:0.3
         }
     ];
 
     const filteredItems = data.filter(
-        item => item.id && item.id===(filterText.toLowerCase()) || item.title && item.title.toLowerCase().includes(filterText.toLowerCase()) || item.lastModified && item.lastModified.toLowerCase().includes(filterText.toLowerCase()) || item.status && item.status.toLowerCase().includes(filterText.toLowerCase()),
+        item => item.id && item.id === (filterText.toLowerCase()) || item.title && item.title.toLowerCase().includes(filterText.toLowerCase()) || item.lastModified && item.lastModified.toLowerCase().includes(filterText.toLowerCase()) || item.status && item.status.toLowerCase().includes(filterText.toLowerCase()),
     );
 
     const subHeaderComponentMemo = React.useMemo(() => {
@@ -149,6 +159,11 @@ const Viewblog = (props) => {
         <>
             <div>
                 <h1>View Articles</h1>
+                <NavLink to="/create-article" style={{ textDecoration: "none" }}>
+                    <Button variant="contained">
+                        Create Article
+                    </Button>
+                </NavLink>
                 <div>
                     <DataTable
                         columns={columns}

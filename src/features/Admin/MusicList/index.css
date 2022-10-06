@@ -19,3 +19,31 @@
 .content{
     margin-top: 2rem;
 }
+.dropdown-content{
+    z-index: 999 !important;
+}
+.ql-editor{
+    min-height: 300px !important;
+}
+.text-right{
+    text-align: end;
+}
+.rmsc .dropdown-container{
+    background-color: #fafafa;
+}
+.rmsc .dropdown-heading{
+    height: 53px;
+    padding-left: 14px;
+}
+.text-center-load{
+    padding: 2rem 1rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+#dltImg .row svg{
+    margin-top: 15px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}

@@ -30,7 +30,7 @@ import { useKeycloak } from "@react-keycloak/web";
 import { setCookie } from "../../utils/commonUtils";
 import { getRolesByPortalScreen } from "../../utils/navigationUtils";
 import { LinearProgressIndicator } from "../../common/components/Loader";
-import {hasRole, logoutAsync} from '../../features/LoginEntry/loginEntrySlice';
+import { hasRole, logoutAsync } from '../../features/LoginEntry/loginEntrySlice';
 import "./styles/drawer.css";
 
 // Icons
@@ -206,14 +206,14 @@ function PersistentDrawerLeft(props) {
     // console.log(screen);
     // console.log(roles);
     // if (keycloak) {
-      return roles.some(async (role) => {
-        const realm = await hasRole(role)
-        // console.log('realm -======> ', realm);
-        // keycloak.hasRealmRole(role);
-        // const resource = keycloak.hasResourceRole(role);
-        return realm ;
-        // || resource;
-      });
+    return roles.some(async (role) => {
+      const realm = await hasRole(role)
+      // console.log('realm -======> ', realm);
+      // keycloak.hasRealmRole(role);
+      // const resource = keycloak.hasResourceRole(role);
+      return realm;
+      // || resource;
+    });
     // }
     // return false;
   };
@@ -420,10 +420,10 @@ function PersistentDrawerLeft(props) {
             <ListItemIcon>
               <ApprovalIcon />
             </ListItemIcon>
-            <ListItemText primary='View Article' />
+            <ListItemText primary='Articles' />
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             button
             key='opOne'
             component={NavLink}
@@ -439,7 +439,7 @@ function PersistentDrawerLeft(props) {
               <VerifiedUserOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary='Create Article' />
-          </ListItem>
+          </ListItem> */}
 
           {/* <ListItem
             button
@@ -474,7 +474,7 @@ function PersistentDrawerLeft(props) {
             <ListItemIcon>
               <RecentActorsOutlinedIcon />
             </ListItemIcon>
-            <ListItemText primary='View Categories' />
+            <ListItemText primary='Categories' />
           </ListItem>
         </List>
       </Collapse>
@@ -500,10 +500,10 @@ function PersistentDrawerLeft(props) {
             <ListItemIcon>
               <ApprovalIcon />
             </ListItemIcon>
-            <ListItemText primary='View Podcast' />
+            <ListItemText primary='Podcasts' />
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             button
             key='opOne'
             component={NavLink}
@@ -519,7 +519,7 @@ function PersistentDrawerLeft(props) {
               <VerifiedUserOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary='Create Podcast' />
-          </ListItem>
+          </ListItem> */}
 
           {/* <ListItem
             button
@@ -554,7 +554,7 @@ function PersistentDrawerLeft(props) {
             <ListItemIcon>
               <RecentActorsOutlinedIcon />
             </ListItemIcon>
-            <ListItemText primary='View Categories' />
+            <ListItemText primary='Categories' />
           </ListItem>
         </List>
       </Collapse>
@@ -580,10 +580,28 @@ function PersistentDrawerLeft(props) {
             <ListItemIcon>
               <ApprovalIcon />
             </ListItemIcon>
-            <ListItemText primary='View White Noise' />
+            <ListItemText primary='White Noise' />
           </ListItem>
 
           <ListItem
+            button
+            key='opFour'
+            component={NavLink}
+            className={classes.nested}
+            exact
+            to='/view-noise-categories'
+            activeStyle={{
+              fontWeight: "bolder",
+              backgroundColor: "#f0f0f0",
+              color: "blue",
+            }}>
+            <ListItemIcon>
+              <RecentActorsOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary='Categories' />
+          </ListItem>
+
+          {/* <ListItem
             button
             key='opOne'
             component={NavLink}
@@ -599,7 +617,7 @@ function PersistentDrawerLeft(props) {
               <VerifiedUserOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary='Create White Noise' />
-          </ListItem>
+          </ListItem> */}
 
           {/* <ListItem
             button
@@ -645,7 +663,7 @@ function PersistentDrawerLeft(props) {
             <ListItemText primary='View Music' />
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             button
             key='opOne'
             component={NavLink}
@@ -661,7 +679,7 @@ function PersistentDrawerLeft(props) {
               <VerifiedUserOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary='Create Music' />
-          </ListItem>
+          </ListItem> */}
 
           {/* <ListItem
             button
@@ -680,6 +698,23 @@ function PersistentDrawerLeft(props) {
             </ListItemIcon>
             <ListItemText primary='Edit Music' />
           </ListItem> */}
+          <ListItem
+            button
+            key='opFour'
+            component={NavLink}
+            className={classes.nested}
+            exact
+            to='/view-music-categories'
+            activeStyle={{
+              fontWeight: "bolder",
+              backgroundColor: "#f0f0f0",
+              color: "blue",
+            }}>
+            <ListItemIcon>
+              <RecentActorsOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary='Categories' />
+          </ListItem>
         </List>
       </Collapse>
     );
@@ -707,7 +742,7 @@ function PersistentDrawerLeft(props) {
             <ListItemText primary='View Question' />
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             button
             key='opOne'
             component={NavLink}
@@ -723,9 +758,9 @@ function PersistentDrawerLeft(props) {
               <VerifiedUserOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary='Create Question' />
-          </ListItem>
+          </ListItem> */}
 
-          <ListItem
+          {/* <ListItem
             button
             key='opThree'
             component={NavLink}
@@ -741,7 +776,7 @@ function PersistentDrawerLeft(props) {
               <TimeIcon />
             </ListItemIcon>
             <ListItemText primary='Edit Question' />
-          </ListItem>
+          </ListItem> */}
         </List>
       </Collapse>
     );
@@ -1095,7 +1130,7 @@ function PersistentDrawerLeft(props) {
                           portal: PORTAL_TYPE_IMM,
                         },
                         {
-                          text: "Content",
+                          text: "Blog Article",
                           icon: <DifferenceIcon />,
                           onClick: () => setOpenContent(!openContent),
                           openIcon2: <ExpandLess />,
@@ -1105,7 +1140,7 @@ function PersistentDrawerLeft(props) {
                           portal: PORTAL_TYPE_IMM,
                         },
                         {
-                          text: "Podcast",
+                          text: "Podcasts",
                           icon: <PodcastsIcon />,
                           onClick: () => setOpenPodcast(!openPodcast),
                           openIcon2: <ExpandLess />,
@@ -1135,7 +1170,7 @@ function PersistentDrawerLeft(props) {
                           portal: PORTAL_TYPE_IMM,
                         },
                         {
-                          text: "Question",
+                          text: "Questions",
                           icon: <QuizIcon />,
                           onClick: () => setOpenQuestion(!openQuestion),
                           openIcon2: <ExpandLess />,
@@ -1144,16 +1179,16 @@ function PersistentDrawerLeft(props) {
                           to: "/view-question",
                           portal: PORTAL_TYPE_IMM,
                         },
-                        {
-                          text: "Appointment",
-                          icon: <BookOnlineIcon />,
-                          onClick: () => setOpenAppointment(!openAppointment),
-                          openIcon2: <ExpandLess />,
-                          closeIcon2: <ExpandMore />,
-                          content: <CollapseItemsAppointment />,
-                          to: "/view-appointment",
-                          portal: PORTAL_TYPE_IMM,
-                        },
+                        // {
+                        //   text: "Appointment",
+                        //   icon: <BookOnlineIcon />,
+                        //   onClick: () => setOpenAppointment(!openAppointment),
+                        //   openIcon2: <ExpandLess />,
+                        //   closeIcon2: <ExpandMore />,
+                        //   content: <CollapseItemsAppointment />,
+                        //   to: "/view-appointment",
+                        //   portal: PORTAL_TYPE_IMM,
+                        // },
                         {
                           text: "Finance",
                           icon: <DevicesOtherOutlinedIcon />,
@@ -1368,7 +1403,7 @@ function PersistentDrawerLeft(props) {
                         // },
                       ].map((item) => (
                         <>
-                        {console.log(item)}
+                          {console.log(item)}
                           <ListItem
                             button
                             component={NavLink}

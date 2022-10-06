@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import Button from '@mui/material/Button';
 import React, { useContext, useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component';
 import styled from 'styled-components';
@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import MainContext from '../../../context/MainContext';
+import Loader from '../../../utils/Loader';
 
 const style = {
     position: 'absolute',
@@ -71,12 +72,13 @@ const Viewcategories = (props) => {
     });
 
     const [value2, setValue2] = useState({
-        id:'',
+        id: '',
         category2: ''
     });
     const [data, setData] = useState([]);
     const context = useContext(MainContext);
-
+    const [finFlag, setFinFlag] = useState(false);
+    const [isLoad, setIsLoad] = useState(false);
     const [openAdd, setOpenAdd] = React.useState(false);
     const handleOpenAdd = () => setOpenAdd(true);
     const handleCloseAdd = () => setOpenAdd(false);
@@ -89,33 +91,35 @@ const Viewcategories = (props) => {
         setOpenEdit(true);
         console.log(e);
         setValue2({
-            id:e.id,
-            category2:e.name
+            id: e.id,
+            category2: e.name
         })
     };
-    
+
     const handleCloseEdit = () => setOpenEdit(false);
 
-    useEffect(()=>{
+    useEffect(() => {
         getData();
-    },[]);
+    }, [finFlag]);
 
-    const deleteData = async (id)=>{
+    const deleteData = async (id) => {
         console.log(id);
-        const ans = await context.deleteCategory(id);
-        console.log(ans);
-        if(ans.status)
-        {
-            props.showAlert(true);
-        }
-        else
-        {
-            props.showAlert(false);
+        let c = window.confirm('Do you really want to delete?')
+        if (c) {
+            const ans = await context.deleteCategory(id);
+            console.log(ans);
+            if (ans.status) {
+                props.showAlert(true);
+                setFinFlag(!finFlag);
+            }
+            else {
+                props.showAlert(false);
+            }
         }
     };
 
-    const getData=async()=>{
-        const ans=await context.getCategory();
+    const getData = async () => {
+        const ans = await context.getCategory("POST");
         console.log(ans.data);
         setData(ans.data);
     };
@@ -124,31 +128,33 @@ const Viewcategories = (props) => {
         {
             name: <h3>Category Name</h3>,
             selector: row => row.name,
-            sortable: true
+            sortable: true,
+            grow: 5
         },
         {
-            name: <h3>Menu</h3>,
+            name: <h3>Actions</h3>,
             cell: (e) => {
                 return (
                     <div className="row">
                         <div style={{ marginRight: "2px", cursor: "pointer" }} onClick={() => {
                             handleOpenEdit(e)
                         }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                             </svg>
                         </div>
-                        <div onClick={()=>{
+                        <div onClick={() => {
                             deleteData(e.id);
                         }} style={{ marginLeft: "2px", cursor: "pointer" }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash-fill" viewBox="0 0 16 16">
                                 <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
                             </svg>
                         </div>
                     </div>
                 )
-            }
+            },
+            grow: 1
         }
     ];
 
@@ -198,45 +204,49 @@ const Viewcategories = (props) => {
 
     const handleSubmit1 = async (e) => {
         e.preventDefault();
+        setIsLoad(true);
         console.log(value1);
         const ans = await context.createCategory({
-            type:'test type',
-            parent_id:'test',
-            name:value1.category1,
-            description:'test',
-            status:'test',
-            created_by_user:'test'
+            type: 'POST',
+            parent_id: 'test',
+            name: value1.category1,
+            description: 'test',
+            status: 'test',
+            created_by_user: 'test'
         });
         console.log(ans);
-        if(ans.status)
-        {
+        if (ans.status) {
             props.showAlert(true);
+            setFinFlag(!finFlag);
+            handleCloseAdd();
         }
-        else
-        {
+        else {
             props.showAlert(false);
         }
+        setIsLoad(false);
     };
 
     const handleSubmit2 = async (e) => {
         e.preventDefault();
+        setIsLoad(true);
         console.log(value2);
         const ans = await context.updateCategory({
-            id:value2.id,
-            type:'test type',
-            parent_id:'test',
-            name:value2.category2,
-            description:'test',
-            status:'test'
+            id: value2.id,
+            type: 'POST',
+            parent_id: 'test',
+            name: value2.category2,
+            description: 'test',
+            status: 'test'
         });
-        if(ans.status)
-        {
+        if (ans.status) {
+            setFinFlag(!finFlag);
             props.showAlert(true);
+            handleCloseEdit();
         }
-        else
-        {
+        else {
             props.showAlert(false);
         }
+        setIsLoad(false);
     };
 
     return (
@@ -252,11 +262,11 @@ const Viewcategories = (props) => {
                         Add Category
                     </Typography>
                     <form onSubmit={handleSubmit1}>
-                        <div style={{marginBottom:"12px"}}>
+                        <div style={{ marginBottom: "12px" }}>
                             <h3>Title</h3>
-                            <TextField id="category1" label="Category" sx={{ width: "100%" }} name="category1" onChange={handleChange1} value={value1.category1} variant="outlined" />
+                            <TextField id="category1" label="Category" sx={{ width: "100%" }} name="category1" onChange={handleChange1} value={value1.category1} variant="outlined" required />
                         </div>
-                        <Button type="submit" color="primary" variant="contained">Submit</Button>
+                        <Button disabled={isLoad} type="submit" color="primary" variant="contained">Submit</Button>
                     </form>
                 </Box>
             </Modal>
@@ -272,17 +282,17 @@ const Viewcategories = (props) => {
                         Edit Category
                     </Typography>
                     <form onSubmit={handleSubmit2}>
-                        <div style={{marginBottom:"12px"}}>
+                        <div style={{ marginBottom: "12px" }}>
                             <h3>Title</h3>
-                            <TextField id="category2" label="Category" sx={{ width: "100%" }} name="category2" onChange={handleChange2} value={value2.category2} variant="outlined" />
+                            <TextField id="category2" label="Category" sx={{ width: "100%" }} name="category2" onChange={handleChange2} value={value2.category2} variant="outlined" required />
                         </div>
-                        <Button type="submit" color="primary" variant="contained">Submit</Button>
+                        <Button disabled={isLoad} type="submit" color="primary" variant="contained">Submit</Button>
                     </form>
                 </Box>
             </Modal>
-
             <div>
-                <Button onClick={handleOpenAdd} variant="contained" color="info">
+                {isLoad ? <Loader /> : null}
+                <Button onClick={handleOpenAdd} variant="contained">
                     Add Category
                 </Button>
                 <div>

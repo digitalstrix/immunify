@@ -24,6 +24,8 @@ import { selectArtworkDetails } from '../../selector';
 import { setPdfUrl, printCards } from '../../mangeCardsSlice';
 import { getSignedUrls } from '../../../ManageTemplates/manageTemplateSlice';
 
+var options=[];
+
 const useStyles = makeStyles((theme) => ({
   image: {
     position: "relative",
@@ -43,7 +45,7 @@ const generateQuantityOptions = (remainingCount) => {
   if (remainingCount <= optionMultiplier) {
     return [remainingCount];
   }
-  const options = [];
+  
   for (let i = optionMultiplier; i < remainingCount; i = i + optionMultiplier) {
     options.push(i);
   }
